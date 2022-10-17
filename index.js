@@ -22,11 +22,17 @@ mongoose.connect(
   { useUnifiedTopology: true, useNewUrlParser: true, useCreateIndex: true }
 );
 
-mongoose.connection.once('open', function(){
-	console.log('Conection has been made!');
-  }).on('error', function(error){
-	  console.log('Error is: ', error);
+mongoose.connection
+  .once("open", function () {
+    console.log("Conection has been made!");
+  })
+  .on("error", function (error) {
+    console.log("Error is: ", error);
   });
+
+app.get("/", (req, res) => {
+  res.send("test working");
+});
 
 app.post("/api/register", async (req, res) => {
   console.log(req.body);
