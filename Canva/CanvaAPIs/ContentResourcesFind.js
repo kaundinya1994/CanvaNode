@@ -4,10 +4,10 @@ const axios = require("axios");
 const contentResourceFind = async (request, response) => {
   try {
     const { data } = await axios.get("https://picsum.photos/v2/list");
-    // if (!isValidPostRequest(process.env.CLIENT_SECRET, request)) {
-    //   response.sendStatus(401);
-    //   return;
-    // }
+    if (!isValidPostRequest(process.env.CLIENT_SECRET, request)) {
+      response.sendStatus(401);
+      return;
+    }
 
     var resources = data.map((resource, index) => {
       if (index < 2) {
