@@ -107,7 +107,7 @@ app.post("/api/quote", async (req, res) => {
     res.json({ status: "error", error: "invalid token" });
   }
 });
-
-app.listen(1337, () => {
-  console.log("Server started on 1337");
+const port = process.env.PORT || 1337;
+app.listen(port, () => {
+  console.log(`Server started on ${port}`);
 });
