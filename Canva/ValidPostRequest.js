@@ -8,8 +8,7 @@ const {
 
 const isValidPostRequest = (secret, request) => {
   // Verify the timestamp
-  const sentAtSeconds = 10000;
-  //    request.header("X-Canva-Timestamp");
+  const sentAtSeconds = request.header("X-Canva-Timestamp");
   const receivedAtSeconds = new Date().getTime() / 1000;
 
   if (!isValidTimestamp(sentAtSeconds, receivedAtSeconds)) {
@@ -26,6 +25,7 @@ const isValidPostRequest = (secret, request) => {
   // Calculate a signature
   const signature = calculateSignature(secret, message);
 
+  
   // Reject requests with invalid signatures
   if (!request.header("X-Canva-Signatures").includes(signature)) {
     return false;
