@@ -4,10 +4,13 @@ const { isValidTimestamp, calculateSignature } = require("./CommonMethods");
 
 const isValidGetRequest = (secret, request) => {
   // Verify the timestamp
-  const sentAtSeconds = 1000;
-  //   request.query.time;
+  const sentAtSeconds = request.query.time;
   const receivedAtSeconds = new Date().getTime() / 1000;
 
+  console.log(
+    "isValidTimestamp(sentAtSeconds, receivedAtSeconds) ",
+    isValidTimestamp(sentAtSeconds, receivedAtSeconds)
+  );
   if (!isValidTimestamp(sentAtSeconds, receivedAtSeconds)) {
     return false;
   }

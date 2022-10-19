@@ -1,7 +1,9 @@
+const User = require("../../models/user.model");
+
 const isValidPostRequest = require("../ValidPostRequest");
 const axios = require("axios");
 
-const contentResourceFind = async (request, response) => {
+const ContentResourceFind = async (request, response) => {
   try {
     const { data } = await axios.get("https://picsum.photos/v2/list");
     if (!isValidPostRequest(process.env.CLIENT_SECRET, request)) {
@@ -9,32 +11,45 @@ const contentResourceFind = async (request, response) => {
       return;
     }
 
-    var resources = data.map((resource, index) => {
-      if (index < 2) {
-        console.log("resource.download_url ", resource.download_url);
-        return {
-          type: "IMAGE",
-          id: resource.id,
-          name: resource.author || resource.id,
-          thumbnail: {
-            url: resource.download_url,
-          },
-          url: resource.download_url,
+    // console.log("request.body.user in ContentResourseFInd ", request.body.user);
 
-          contentType: "image/jpeg",
-        };
-      }
+    const user = await User.findOne({
+      userID: request.body.user,
     });
-    resources = resources.filter((n) => n);
-    console.log(resources);
-    response.status(200).send({
-      type: "SUCCESS",
-      resources,
-    });
+
+    // console.log("user in ContentResourseFInd ", user);
+    var condition = false;
+    if (user == null) {
+      response.status(200).send({
+        type: "ERROR",
+        errorCode: "CONFIGURATION_REQUIRED",
+      });
+    } else {
+      var resources = data.map((resource, index) => {
+        if (index < 2) {
+          return {
+            type: "IMAGE",
+            id: resource.id,
+            name: resource.author || resource.id,
+            thumbnail: {
+              url: resource.download_url,
+            },
+            url: resource.download_url,
+
+            contentType: "image/jpeg",
+          };
+        }
+      });
+      resources = resources.filter((n) => n);
+      response.status(200).send({
+        type: "SUCCESS",
+        resources,
+      });
+    }
   } catch (error) {
     console.log(error);
     response.send(error);
   }
 };
 
-module.exports = contentResourceFind;
+module.exports = ContentResourceFind;

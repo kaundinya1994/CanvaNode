@@ -2,7 +2,8 @@ const express = require("express");
 const app = express();
 const cors = require("cors");
 const dotenv = require("dotenv");
-
+const querystring = require("querystring");
+  
 dotenv.config();
 
 const dbConn = require("./DB/dbConnection");
@@ -10,14 +11,28 @@ const Register = require("./APIs/Register");
 const Login = require("./APIs/Login");
 
 const ContentResourcesFind = require("./Canva/CanvaAPIs/ContentResourcesFind");
+const Configuration = require("./Canva/CanvaAPIs/Configuration");
+const ConfigurationDelete = require("./Canva/CanvaAPIs/ConfigurationDelete");
+const isValidGetRequest = require("./Canva/ValidGetRequest");
 
 app.use(cors());
 app.use(express.json());
 
 dbConn();
 
-app.get("/", (req, res) => {
-  res.send("test working");
+app.get("/", (request, response) => {
+  console.log("request.query ", request.query);
+  if (!isValidGetRequest(process.env.CLIENT_SECRET, request)) {
+    response.sendStatus(401);
+    return;
+  }
+  const params = querystring.stringify({
+    success: true,
+    state: request.query.state,
+  });
+
+  // Redirect back to Canva
+  response.redirect(302, `https://canva.com/apps/configured?${params}`);
 });
 
 // ------------------------ Register and Login API ------------------------ //
@@ -28,6 +43,8 @@ app.post("/api/login", Login);
 // ------------------------ Canva API ------------------------ //
 
 app.post("/content/resources/find", ContentResourcesFind);
+app.post("/configuration", Configuration);
+app.post("/configuration/delete", ConfigurationDelete);
 
 // ------------------------ Canva API ------------------------ //
 
