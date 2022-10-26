@@ -14,14 +14,16 @@ const Login = async (request, response) => {
     email: request.body.email,
   });
 
+  console.log(user);
   if (!user) {
-    return { status: "error", error: "Invalid login" };
+    return response.json({ status: "error", error: "Invalid login" });
   }
 
   const isPasswordValid = await bcrypt.compare(
     request.body.password,
     user.password
   );
+  console.log(isPasswordValid);
 
   if (isPasswordValid) {
     // console.log(request.body.userID);
