@@ -3,7 +3,7 @@ const app = express();
 const cors = require("cors");
 const dotenv = require("dotenv");
 const querystring = require("querystring");
-  
+
 dotenv.config();
 
 const dbConn = require("./DB/dbConnection");
@@ -15,8 +15,11 @@ const Configuration = require("./Canva/CanvaAPIs/Configuration");
 const ConfigurationDelete = require("./Canva/CanvaAPIs/ConfigurationDelete");
 const isValidGetRequest = require("./Canva/ValidGetRequest");
 const { request } = require("http");
-
-app.use(cors());
+app.use(
+  cors({
+    origin: "*",
+  })
+);
 app.use(express.json());
 
 dbConn();
@@ -27,7 +30,7 @@ app.get("/", (request, response) => {
     response.sendStatus(401);
     return;
   }
-  
+
   // const params = querystring.stringify({
   //   success: true,
   //   state: ["user"],
@@ -36,9 +39,11 @@ app.get("/", (request, response) => {
 
   // Redirect back to Canva
   // response.redirect(302, `https://canva.com/apps/configured?${params}`);
-  response.redirect(302, `https://silver-bavarois-1eda0d.netlify.app${request.url}`);
+  response.redirect(
+    302,
+    `https://silver-bavarois-1eda0d.netlify.app${request.url}`
+  );
 });
-
 
 // ------------------------ Register and Login API ------------------------ //
 app.post("/api/register", Register);
