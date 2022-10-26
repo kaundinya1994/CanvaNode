@@ -5,10 +5,10 @@ const querystring = require("querystring");
 const isValidGetRequest = require("../Canva/ValidGetRequest");
 
 const Login = async (request, response) => {
-  // if (!isValidGetRequest(process.env.CLIENT_SECRET, request)) {
-  //   response.sendStatus(401);
-  //   return;
-  // }
+  if (!isValidGetRequest(process.env.CLIENT_SECRET, request)) {
+    response.sendStatus(401);
+    return;
+  }
 
   var user = await User.findOne({
     email: request.body.email,
