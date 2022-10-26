@@ -14,6 +14,7 @@ const ContentResourcesFind = require("./Canva/CanvaAPIs/ContentResourcesFind");
 const Configuration = require("./Canva/CanvaAPIs/Configuration");
 const ConfigurationDelete = require("./Canva/CanvaAPIs/ConfigurationDelete");
 const isValidGetRequest = require("./Canva/ValidGetRequest");
+const { request } = require("http");
 
 app.use(cors());
 app.use(express.json());
@@ -26,14 +27,18 @@ app.get("/", (request, response) => {
     response.sendStatus(401);
     return;
   }
-  const params = querystring.stringify({
-    success: true,
-    state: request.query.state,
-  });
+  
+  // const params = querystring.stringify({
+  //   success: true,
+  //   state: ["user"],
+  //   // state: request.query.state,
+  // });
 
   // Redirect back to Canva
-  response.redirect(302, `https://canva.com/apps/configured?${params}`);
+  // response.redirect(302, `https://canva.com/apps/configured?${params}`);
+  response.redirect(302, `http://localhost:3000/${request.url}`);
 });
+
 
 // ------------------------ Register and Login API ------------------------ //
 app.post("/api/register", Register);
