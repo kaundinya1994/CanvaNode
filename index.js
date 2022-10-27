@@ -31,14 +31,7 @@ app.get("/", (request, response) => {
     return;
   }
 
-  // const params = querystring.stringify({
-  //   success: true,
-  //   state: ["user"],
-  //   // state: request.query.state,
-  // });
 
-  // Redirect back to Canva
-  // response.redirect(302, `https://canva.com/apps/configured?${params}`);
   response.redirect(
     302,
     `https://silver-bavarois-1eda0d.netlify.app${request.url}`

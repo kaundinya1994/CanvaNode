@@ -6,6 +6,7 @@ const Configuration = async (request, response) => {
       response.sendStatus(401);
       return;
     }
+    console.log("Only used for PUBLISH EXTENSION");
 
     response.status(200).send({
       type: "SUCCESS",

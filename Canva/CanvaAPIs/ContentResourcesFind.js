@@ -1,7 +1,8 @@
-const User = require("../../models/user.model");
-
-const isValidPostRequest = require("../ValidPostRequest");
 const axios = require("axios");
+const isValidPostRequest = require("../ValidPostRequest");
+const GetAllAlbums = require("../DamAPIs/GetAllAlbums");
+
+const User = require("../../models/user.model");
 
 const ContentResourceFind = async (request, response) => {
   try {
@@ -9,6 +10,11 @@ const ContentResourceFind = async (request, response) => {
       response.sendStatus(401);
       return;
     }
+
+    var albumnData;
+    GetAllAlbums().then((data) => {
+      albumnData = data;
+    });
 
     const user = await User.findOne({
       userID: request.body.user,
@@ -39,23 +45,7 @@ const ContentResourceFind = async (request, response) => {
         if (!request.body.containerId) {
           response.send({
             type: "SUCCESS",
-            resources: [
-              {
-                type: "CONTAINER",
-                id: "animals",
-                name: "Animals",
-              },
-              {
-                type: "CONTAINER",
-                id: "food",
-                name: "Food",
-              },
-              {
-                type: "CONTAINER",
-                id: "people",
-                name: "People",
-              },
-            ],
+            resources: albumnData,
           });
         }
       }
@@ -76,6 +66,9 @@ const ContentResourceFind = async (request, response) => {
                 },
                 url: resource.download_url,
 
+                // Working URLS
+                // url: resource.download_url, -- https://picsum.photos/id/0/5616/3744
+                // url: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQqsELENQOeaui5xm9XJwTdd3wHHO9BxPvb_Q&usqp=CAU",
                 contentType: "image/jpeg",
               };
             }
@@ -85,10 +78,10 @@ const ContentResourceFind = async (request, response) => {
             type: "SUCCESS",
             resources,
           });
-        }else{
+        } else {
           response.status(200).send({
             type: "SUCCESS",
-            resources:[],
+            resources: [],
           });
         }
       }

@@ -8,7 +8,6 @@ const Login = async (request, response) => {
     email: request.body.email,
   });
 
-  console.log(user);
   if (!user) {
     return response.json({ status: "error", error: "Invalid login" });
   }
@@ -17,7 +16,6 @@ const Login = async (request, response) => {
     request.body.password,
     user.password
   );
-  console.log(isPasswordValid);
 
   if (isPasswordValid) {
     // console.log(request.body.userID);
