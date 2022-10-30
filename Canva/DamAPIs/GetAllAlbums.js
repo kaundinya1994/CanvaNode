@@ -34,6 +34,7 @@ const GetAllAlbums = async () => {
       data,
       options
     );
+    console.log("GetAllAlbums res ", res);
     if (res.status == 200 && res.data?.data) {
       // console.log(res.data.data);
 
