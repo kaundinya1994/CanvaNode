@@ -16,10 +16,7 @@ const ContentResourceFind = async (request, response) => {
       return;
     }
 
-    var albumnData;
-    GetAllAlbums().then((data) => {
-      albumnData = data;
-    });
+    var albumnData = await GetAllAlbums();
 
     const user = await User.findOne({
       userID: request.body.user,
