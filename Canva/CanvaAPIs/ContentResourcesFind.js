@@ -3,6 +3,7 @@ const isValidPostRequest = require("../ValidPostRequest");
 const GetAllAlbums = require("../DamAPIs/GetAllAlbums");
 
 const User = require("../../models/user.model");
+const GetAlbumImageDetails = require("../DamAPIs/GetAlbumImageDetails");
 
 const ContentResourceFind = async (request, response) => {
   try {
@@ -55,24 +56,11 @@ const ContentResourceFind = async (request, response) => {
       // ======================= Image implementation =======================
       else if (request.body.types.includes("IMAGE")) {
         if (request.body.containerId) {
-          var resources = data.map((resource, index) => {
-            if (index < 2) {
-              return {
-                type: "IMAGE",
-                id: resource.id,
-                name: resource.author || resource.id,
-                thumbnail: {
-                  url: resource.download_url,
-                },
-                url: resource.download_url,
+          let dataImageAlbum = await GetAlbumImageDetails(
+            request.body.containerId
+          );
 
-                // Working URLS
-                // url: resource.download_url, -- https://picsum.photos/id/0/5616/3744
-                // url: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQqsELENQOeaui5xm9XJwTdd3wHHO9BxPvb_Q&usqp=CAU",
-                contentType: "image/jpeg",
-              };
-            }
-          });
+          var resources = dataImageAlbum;
           resources = resources.filter((n) => n);
           response.status(200).send({
             type: "SUCCESS",

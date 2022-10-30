@@ -26,7 +26,7 @@ const GetAllAlbums = async () => {
     const options = {
       headers: {
         "Content-type": "application/json",
-        Authorization: `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjlhMGRhNTg3LTU3NDAtNGM3YS04ZGMwLTQyYWE3ZWY5OGMyZCIsImlhdCI6MTY2Njg3MTU3MiwiZXhwIjoxNjY2OTU3OTcyfQ.usIaOxzyz2XEVDgiiMUH8uj2Pv-sXana5XRnVcFOEOU`,
+        Authorization: `Bearer ${process.env.BEARER}`,
       },
     };
     let res = await axios.post(
