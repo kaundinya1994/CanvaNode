@@ -7,6 +7,10 @@ const GetAlbumImageDetails = require("../DamAPIs/GetAlbumImageDetails");
 
 const ContentResourceFind = async (request, response) => {
   try {
+    console.log(
+      "isValidPostRequest(process.env.CLIENT_SECRET, request) ",
+      isValidPostRequest(process.env.CLIENT_SECRET, request)
+    );
     if (!isValidPostRequest(process.env.CLIENT_SECRET, request)) {
       response.sendStatus(401);
       return;
@@ -29,8 +33,10 @@ const ContentResourceFind = async (request, response) => {
       });
     } else {
       // ======================= Container implementation =======================
-      const { data } = await axios.get("https://picsum.photos/v2/list");
 
+      console.log(
+        "// ======================= Container info ======================="
+      );
       console.log("request.body.containerId ", request.body.containerId);
       console.log("request.body.types ", request.body.types);
       if (request.body.types.includes("CONTAINER")) {
@@ -44,6 +50,7 @@ const ContentResourceFind = async (request, response) => {
 
         // The user has not opened a container
         if (!request.body.containerId) {
+          console.log("albumnData", albumnData);
           response.send({
             type: "SUCCESS",
             resources: albumnData,
@@ -55,11 +62,15 @@ const ContentResourceFind = async (request, response) => {
 
       // ======================= Image implementation =======================
       else if (request.body.types.includes("IMAGE")) {
+        console.log(
+          "// ======================= Image info ======================="
+        );
         if (request.body.containerId) {
           let dataImageAlbum = await GetAlbumImageDetails(
             request.body.containerId
           );
 
+          console.log("dataImageAlbum ", dataImageAlbum);
           var resources = dataImageAlbum;
           resources = resources.filter((n) => n);
           response.status(200).send({
