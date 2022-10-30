@@ -34,7 +34,7 @@ app.get("/", (request, response) => {
 
   response.redirect(
     302,
-    `https://silver-bavarois-1eda0d.netlify.app${request.url}`
+    `https://enchanting-bavarois-462efb.netlify.app${request.url}`
   );
 });
 
